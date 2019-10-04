@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
-class App extends Component {
+class ReduxCounter extends Component {
   render() {
     return (
       <div>
-        Hello world
+        ReduxCounter 
+ReduxCounter
       </div>
     );
   }
 }
 
-export default App;
+export default ReduxCounter;
