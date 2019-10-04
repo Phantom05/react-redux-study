@@ -8,10 +8,17 @@ class Todo extends Component {
   state={
     input:'',
     todos:[
-      {id:0,text:'리액트 소개1', checked:false},
-      {id:1,text:'리액트 소개2', checked:true},
-      {id:2,text:'리액트 소개3', checked:false}
-    ]
+      {id:0,text:'리액트 소개1', checked:false,color:"#343a40"},
+      {id:1,text:'리액트 소개2', checked:true,color:'#f03e3e'},
+      {id:2,text:'리액트 소개3', checked:false,color:'#12b886'}
+    ],
+    colors:[
+      {color:'#343a40',id:0}, 
+      {color:'#f03e3e',id:1}, 
+      {color:'#12b886',id:2}, 
+      {color:'#228ae6',id:3}
+    ],
+    currentColor:'#343a40'
   }
   handleChange = (e) =>{
     const {name,value} = e.target;
@@ -20,17 +27,21 @@ class Todo extends Component {
     })
   }
 
-  handleCreate = () =>{
-    const {input,todos} = this.state;
-    this.setState({
-      input: '', // 인풋 비우고
-      // concat 을 사용하여 배열에 추가
-      todos: todos.concat({
-        id: this.id++,
-        text: input,
-        checked: false
-      })
-    });
+  handleCreate = (color) =>{
+    return ()=>{
+      const {input,todos} = this.state;
+      this.setState({
+        input: '', // 인풋 비우고
+        // concat 을 사용하여 배열에 추가
+        todos: todos.concat({
+          id: this.id++,
+          text: input,
+          checked: false,
+          color:color
+        })
+      });
+      
+    }
   }
 
   handleKeyPress = (e) =>{
@@ -54,26 +65,49 @@ class Todo extends Component {
       todos:nextTodos
     })
   }
+  
+  handleRemove= (id) => {
+    const {todos} = this.state;
+    this.setState({
+      todos:todos.filter(todo => todo.id !== id)
+    })
+  }
+
+  handleColorchange = (color) =>{
+    console.log('click',color);
+    this.setState({
+      currentColor:color
+    })
+  }
+
   render() {
-    const {input, todos} = this.state;
+    const {input, todos, colors, currentColor} = this.state;
     const {
       handleChange,
       handleCreate,
       handleKeyPress,
-      handleToggle
+      handleToggle,
+      handleRemove
     } = this;
     return (
-      <TodoListTemplate form={(
+      <TodoListTemplate 
+      colors={colors} 
+      onColorChange={this.handleColorchange}
+      color={currentColor}
+      form={(
         <Form 
           value={input}
           onKeyPress={handleKeyPress}
           onChange={handleChange}
           onCreate={handleCreate}
+          color={currentColor}
         />
       )}>
         <TodoItemList 
           todos={todos}
           onToggle={handleToggle}
+          onRemove={handleRemove}
+          
         />
       </TodoListTemplate>
     );

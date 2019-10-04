@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import TodoItem from './TodoItem';
 
 class TodoItemList extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.todos !== nextProps.todos
+  }
   render() {
+    console.log('render');
     const {todos, onToggle, onRemove} = this.props;
     const todoList = todos.map(
       (todo) => (
@@ -11,6 +15,7 @@ class TodoItemList extends Component {
           onToggle={onToggle}
           onRemove={onRemove}
           key={todo.id}
+          color={todo.color}
         />
       )
     )
